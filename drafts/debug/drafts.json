@@ -1,0 +1,228 @@
+"data": {
+    "descriptions": {
+        "app_name": "MySQL Log Monitor",
+        "app_description": "Monitors a remote MySQL server for new log messages and posts them to the Telex channel.",
+        "app_url": base_url,  # Base URL of your server
+        "app_logo": "",
+        "background_color": "#fff"
+    },
+    "integration_type": "interval",
+    "settings": [
+        {
+            "label": "mysql_host",
+            "type": "text",
+                    "required": True,
+                    "default": MYSQL_HOST or "your-mysql-host"
+        },
+        {
+            "label": "mysql_user",
+            "type": "text",
+                    "required": True,
+                    "default": MYSQL_USER or "your-username"
+        },
+        {
+            "label": "mysql_password",
+            "type": "text",
+                    "required": True,
+                    "default": MYSQL_PASSWORD or "your-password"
+        },
+        {
+            "label": "mysql_database",
+            "type": "text",
+                    "required": True,
+                    "default": MYSQL_DATABASE or "your-database"
+        },
+        {
+            "label": "last_log_id",
+            "type": "text",
+                    "required": False,
+                    "default": "0"
+        },
+        {
+            "label": "interval",
+            "type": "text",
+                    "required": True,
+                    "default": "* * * * *"
+        }
+    ],
+    "tick_url": f"{base_url}/tick"
+}
+
+
+{
+    "data": {
+      "date": {
+        "created_at": "YYYY-MM-DD",
+        "updated_at": "YYYY-MM-DD"
+      },
+      "descriptions": {
+        "app_description": "A brief description of the application functionality.",
+        "app_logo": "URL to the application logo.",
+        "app_name": "Name of the application.",
+        "app_url": "URL to the application or service.",
+        "background_color": "#HEXCODE"
+      },
+      "integration_category": "Monitoring & Logging",
+      "integration_type": "interval",
+      "is_active": false,
+      "output": [
+        {
+          "label": "output_channel_1",
+          "value": true
+        },
+        {
+          "label": "output_channel_2",
+          "value": false
+        }
+      ],
+      "key_features": [
+        "Feature description 1.",
+        "Feature description 2.",
+        "Feature description 3.",
+        "Feature description 4."
+      ],
+      "permissions": {
+        "monitoring_user": {
+          "always_online": true,
+          "display_name": "Performance Monitor"
+        }
+      },
+      "settings": [
+        {
+          "label": "interval",
+          "type": "text",
+          "required": true,
+          "default": "* * * * *"
+        },
+        {
+          "label": "Key",
+          "type": "text",
+          "required": true,
+          "default": "1234567890"
+        },
+        {
+          "label": "Do you want to continue",
+          "type": "checkbox",
+          "required": true,
+          "default": "Yes"
+        },
+        {
+          "label": "Provide Speed",
+          "type": "number",
+          "required": true,
+          "default": "1000"
+        },
+        {
+          "label": "Sensitivity Level",
+          "type": "dropdown",
+          "required": true,
+          "default": "Low",
+          "options": ["High", "Low"]
+        },
+        {
+          "label": "Alert Admin",
+          "type": "multi-checkbox",
+          "required": true,
+          "default": "Super-Admin",
+          "options": ["Super-Admin", "Admin", "Manager", "Developer"]
+        }
+      ],
+      "tick_url": "URL for subscribing to Telex's clock.",
+      "target_url": "Optional URL for getting data from the Telex channel"
+    }
+  }
+
+
+  {
+    "data": {
+      "date": {
+        "created_at": "2025-02-18",
+        "updated_at": "2025-02-18"
+      },
+      "descriptions": {
+        "app_description": "Monitors a remote MySQL server for performance metrics, slow queries, and resource usage. Alerts are sent when critical thresholds are reached.",
+        "app_logo": "data:image/png;base64,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",
+        "app_name": "MySQL Performance Monitor",
+        "app_url": "https://ping.telex.im/v1/webhooks/01951646-7c0f-7f5b-9aa4-ec674d2f666e",  # It could be base_url
+        "background_color": "#336699"
+      },
+      "integration_category": "Monitoring & Logging",
+      "integration_type": "interval",
+      "is_active": true,
+      "output": [
+        {
+          "label": "Email Notifications",
+          "value": true
+        },
+        {
+          "label": "Discord Webhook",
+          "value": false
+        }
+      ],
+      "key_features": [
+        "Real-time performance monitoring",
+        "Slow query analysis",
+        "Resource usage metrics",
+        "Alerting on critical thresholds"
+      ],
+      "permissions": {
+        "monitoring_user": {
+          "always_online": true,
+          "display_name": "MySQL Monitor"
+        }
+      },
+      "settings": [
+        {
+          "label": "interval",
+          "type": "text",
+          "required": true,
+          "default": "* * * * *"
+        },
+        {
+          "label": "MySQL Host",
+          "type": "text",
+          "required": true,
+          "default": ""
+        },
+        {
+          "label": "MySQL User",
+          "type": "text",
+          "required": true,
+          "default": ""
+        },
+        {
+          "label": "MySQL Password",
+          "type": "text",
+          "required": true,
+          "default": ""
+        },
+        {
+          "label": "MySQL Database",
+          "type": "text",
+          "required": true,
+          "default": ""
+        },
+        {
+          "label": "Alert Threshold (Slow Queries)",
+          "type": "number",
+          "required": true,
+          "default": "100"
+        },
+        {
+          "label": "Alert Threshold (CPU Usage)",
+          "type": "number",
+          "required": true,
+          "default": "90"
+        },
+        {
+          "label": "Alert Threshold (Memory Usage)",
+          "type": "number",
+          "required": true,
+          "default": "90"
+        }
+      ],
+      "tick_url": f"{base_url}/tick",
+      "target_url": ""
+    }
+  }
+
