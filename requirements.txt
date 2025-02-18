@@ -1,3 +1,12 @@
 mysql-connector-python
 schedule
-smtplib
+python-dotenv
+requests
+mysqlclient
+fastapi
+mysql
+httpx
+asyncio
+uvicorn
+pytest
+PyMySQL
