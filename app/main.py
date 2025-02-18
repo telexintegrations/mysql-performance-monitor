@@ -223,6 +223,9 @@ def get_integration_json(request: Request):
                     "app_logo": "https://i.imgur.com/lZqvffp.png",
                     "background_color": "#fff"
                 },
+                "integration_category": "Monitoring & Logging",
+                "integration_type": "interval",
+                "is_active": false,
                 "key_features": [
                     "Monitors a remote MySQL server",
                     "Logs new MySQL Server status to the Telex channel."
