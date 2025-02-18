@@ -213,34 +213,55 @@ def get_integration_json(request: Request):
     try:
         return {
             "data": {
-                "id": "mysql-performance-monitor",
-                "name": "MySQL Performance Monitor",
-                "version": "1.0",
+                "date": {
+                    "created_at": "2025-02-18",
+                    "updated_at": "2025-02-18"
+                },
                 "descriptions": {
                     "app_name": "MySQL Performance Monitor",
                     "app_description": "Monitors MySQL Databases in real time",
-                    "app_url": base_url,
-                    "app_logo": "https://i.imgur.com/lZqvffp.png",
+                    "app_logo": "data:image/png;base64,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",
+                    "app_url": "https://mysql-performance-monitor.onrender.com",
                     "background_color": "#fff"
                 },
-                "integration_category": "Monitoring & Logging",
-                "integration_type": "interval",
                 "is_active": true,
+                "integration_type": "interval",
                 "key_features": [
                     "Monitors a remote MySQL server",
-                    "Logs new MySQL Server status to the Telex channel."
+                    "Logs new MySQL Server status to the Telex channel"
                 ],
-                "website": "https://mysql-performance-monitor.onrender.com",
-                "tick_url": f"{base_url}/tick",
-                "target_url": f"{base_url}/tick",
+                "author": "Dohou Daniel Favour",
                 "settings": [
-                    {"label": "MySQL Host", "type": "text", "required": True},
-                    {"label": "MySQL User", "type": "text", "required": True},
-                    {"label": "MySQL Password", "type": "text", "required": True},
-                    {"label": "MySQL Database", "type": "text", "required": True},
-                ]
+                    {
+                        "label": "MySQL Host",
+                        "type": "text",
+                        "required": true,
+                        "default": ""
+                    },
+                    {
+                        "label": "MySQL User",
+                        "type": "text",
+                        "required": true,
+                        "default": ""
+                    },
+                    {
+                        "label": "MySQL Password",
+                        "type": "text",
+                        "required": true,
+                        "default": ""
+                    },
+                    {
+                        "label": "MySQL Database",
+                        "type": "text",
+                        "required": true,
+                        "default": ""
+                    }
+                ],
+                "target_url": f"{base_url}/tick",
+                "tick_url": f"{base_url}/tick"
             }
         }
+        f"{base_url}/tick",
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": "Failed to generate integration JSON"})
 
