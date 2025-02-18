@@ -12,7 +12,7 @@ from fastapi import FastAPI, Request, BackgroundTasks
 from starlette.responses import JSONResponse
 from dotenv import load_dotenv
 import os
-from os import getenv
+from os import getenv, environ
 from concurrent.futures import ThreadPoolExecutor
 
 # Load environment variables
@@ -230,4 +230,5 @@ def get_integration_json(request: Request):
 if __name__ == "__main__":
     """ Running the FastAPI application. """
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=5000)
+    port = int(environ.get("PORT", 5000))  # Default to 5000 if PORT is not set
+    uvicorn.run(app, host="127.0.0.1", port=port)
