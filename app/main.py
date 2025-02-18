@@ -223,6 +223,10 @@ def get_integration_json(request: Request):
                     "app_logo": "https://i.imgur.com/lZqvffp.png",
                     "background_color": "#fff"
                 },
+                "key_features": [
+                    "Monitors a remote MySQL server",
+                    "Logs new MySQL Server status to the Telex channel."
+                ],
                 "website": "https://mysql-performance-monitor.onrender.com",
                 "tick_url": f"{base_url}/tick",
                 "settings": [
