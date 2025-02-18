@@ -216,7 +216,7 @@ def get_integration_json(request: Request):
                 "id": "mysql-performance-monitor",
                 "name": "MySQL Performance Monitor",
                 "version": "1.0",
-                "description": {
+                "descriptions": {
                     "app_name": "MySQL Performance Monitor",
                     "app_description": "Monitors website uptime",
                     "app_url": base_url,
