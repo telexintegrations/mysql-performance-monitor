@@ -216,7 +216,13 @@ def get_integration_json(request: Request):
                 "id": "mysql-performance-monitor",
                 "name": "MySQL Performance Monitor",
                 "version": "1.0",
-                "description": "Monitor MySQL database health and performance",
+                "description": {
+                    "app_name": "MySQL Performance Monitor",
+                    "app_description": "Monitors website uptime",
+                    "app_url": base_url,
+                    "app_logo": "https://i.imgur.com/lZqvffp.png",
+                    "background_color": "#fff"
+                },
                 "website": "https://mysql-performance-monitor.onrender.com",
                 "tick_url": f"{base_url}/tick",
                 "settings": [
