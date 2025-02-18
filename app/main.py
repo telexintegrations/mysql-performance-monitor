@@ -232,6 +232,7 @@ def get_integration_json(request: Request):
                 ],
                 "website": "https://mysql-performance-monitor.onrender.com",
                 "tick_url": f"{base_url}/tick",
+                "target_url": f"{base_url}/tick",
                 "settings": [
                     {"label": "MySQL Host", "type": "text", "required": True},
                     {"label": "MySQL User", "type": "text", "required": True},
