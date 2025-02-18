@@ -61,7 +61,8 @@ def get_mysql_status():
             database=MYSQL_DATABASE,
             cursorclass=pymysql.cursors.DictCursor
         )
-        print("\n\nConnected to MySQL successfully.\n\nFetching MySQL Server Health Status...")
+        print(
+            "\n\nConnected to MySQL successfully.\n\nFetching MySQL Server Health Status...")
         cursor = connection.cursor()
 
         # MySQL Version
@@ -89,7 +90,8 @@ def get_mysql_status():
         connections = cursor.fetchone()
 
         # Current Open Connections
-        cursor.execute("SELECT COUNT(*) AS open_conn FROM information_schema.processlist;")
+        cursor.execute(
+            "SELECT COUNT(*) AS open_conn FROM information_schema.processlist;")
         open_conn = cursor.fetchone()
 
         # Query Cache Hits
@@ -210,18 +212,20 @@ def get_integration_json(request: Request):
     base_url = str(request.base_url).rstrip("/")
     try:
         return {
-            "id": "mysql-performance-monitor",
-            "name": "MySQL Performance Monitor",
-            "version": "1.0",
-            "description": "Monitor MySQL database health and performance",
-            "website": "https://mysql-performance-monitor.onrender.com",
-            "tick_url": f"{base_url}/tick",
-            "settings": [
-                {"label": "MySQL Host", "type": "text", "required": True},
-                {"label": "MySQL User", "type": "text", "required": True},
-                {"label": "MySQL Password", "type": "text", "required": True},
-                {"label": "MySQL Database", "type": "text", "required": True},
-            ]
+            "data": {
+                "id": "mysql-performance-monitor",
+                "name": "MySQL Performance Monitor",
+                "version": "1.0",
+                "description": "Monitor MySQL database health and performance",
+                "website": "https://mysql-performance-monitor.onrender.com",
+                "tick_url": f"{base_url}/tick",
+                "settings": [
+                    {"label": "MySQL Host", "type": "text", "required": True},
+                    {"label": "MySQL User", "type": "text", "required": True},
+                    {"label": "MySQL Password", "type": "text", "required": True},
+                    {"label": "MySQL Database", "type": "text", "required": True},
+                ]
+            }
         }
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": "Failed to generate integration JSON"})
