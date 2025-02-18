@@ -261,7 +261,7 @@ def get_integration_json(request: Request):
                 "tick_url": f"{base_url}/tick"
             }
         }
-        f"{base_url}/tick",
+        # f"{base_url}/tick",
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": "Failed to generate integration JSON"})
 
