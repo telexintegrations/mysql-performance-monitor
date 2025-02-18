@@ -218,14 +218,14 @@ def get_integration_json(request: Request):
                 "version": "1.0",
                 "descriptions": {
                     "app_name": "MySQL Performance Monitor",
-                    "app_description": "Monitors website uptime",
+                    "app_description": "Monitors MySQL Databases in real time",
                     "app_url": base_url,
                     "app_logo": "https://i.imgur.com/lZqvffp.png",
                     "background_color": "#fff"
                 },
                 "integration_category": "Monitoring & Logging",
                 "integration_type": "interval",
-                "is_active": false,
+                "is_active": "false",
                 "key_features": [
                     "Monitors a remote MySQL server",
                     "Logs new MySQL Server status to the Telex channel."
