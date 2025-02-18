@@ -1,0 +1,1 @@
+This directory contains the MySQL check Python script. Check the `MySQL.md` file in this directory to know more about these commands.
