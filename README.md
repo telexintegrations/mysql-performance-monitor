@@ -287,54 +287,6 @@ Triggers the MySQL health check:
 
 To test the integration, use the following `curl` command to trigger the `/tick` endpoint with user-supplied details:
 
-<!--
-```bash
-curl --location --request POST 'http://127.0.0.1:5000/tick' \
---header 'Content-Type: application/json' \
---data '{
-  "channel_id": "mysql-performance-monitor",
-  "return_url": "https://ping.telex.im/v1/webhooks/01951646-7c0f-7f5b-9aa4-ec674d2f666e",
-  "settings": [
-    {
-      "label": "MySQL Host",
-      "type": "text",
-      "required": true,
-      "default": "your.mysql.host"
-    },
-    {
-      "label": "MySQL User",
-      "type": "text",
-      "required": true,
-      "default": "your_username"
-    },
-    {
-      "label": "MySQL Password",
-      "type": "text",
-      "required": true,
-      "default": "your_password"
-    },
-    {
-      "label": "MySQL Database",
-      "type": "text",
-      "required": true,
-      "default": "your_database"
-    },
-    {
-      "label": "WebHook URL Configuration",
-      "type": "text",
-      "required": true,
-      "default": "https://ping.telex.im/v1/webhooks/01951646-7c0f-7f5b-9aa4-ec674d2f666e"
-    },
-    {
-      "label": "interval",
-      "type": "text",
-      "required": true,
-      "default": "*/5 * * * *"
-    }
-  ]
-}'
-```
--->
 
 ```json
 
@@ -403,5 +355,51 @@ This command sends a JSON payload with your MySQL connection details and the Tel
 
 [Dohou Daniel Favour](https://linktr.ee/dohoudanielfavour)
 
-
-
+<!--
+```bash
+curl --location --request POST 'http://127.0.0.1:5000/tick' \
+--header 'Content-Type: application/json' \
+--data '{
+  "channel_id": "mysql-performance-monitor",
+  "return_url": "https://ping.telex.im/v1/webhooks/01951646-7c0f-7f5b-9aa4-ec674d2f666e",
+  "settings": [
+    {
+      "label": "MySQL Host",
+      "type": "text",
+      "required": true,
+      "default": "your.mysql.host"
+    },
+    {
+      "label": "MySQL User",
+      "type": "text",
+      "required": true,
+      "default": "your_username"
+    },
+    {
+      "label": "MySQL Password",
+      "type": "text",
+      "required": true,
+      "default": "your_password"
+    },
+    {
+      "label": "MySQL Database",
+      "type": "text",
+      "required": true,
+      "default": "your_database"
+    },
+    {
+      "label": "WebHook URL Configuration",
+      "type": "text",
+      "required": true,
+      "default": "https://ping.telex.im/v1/webhooks/01951646-7c0f-7f5b-9aa4-ec674d2f666e"
+    },
+    {
+      "label": "interval",
+      "type": "text",
+      "required": true,
+      "default": "*/5 * * * *"
+    }
+  ]
+}'
+```
+-->
