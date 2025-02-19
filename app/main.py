@@ -257,8 +257,8 @@ def get_integration_json(request: Request):
                         "default": ""
                     }
                 ],
-                "target_url": f"{base_url}/tick",
-                "tick_url": f"{base_url}/tick"
+                "target_url": "https://mysql-performance-monitor.onrender.com/tick",
+                "tick_url": "https://mysql-performance-monitor.onrender.com/tick"
             }
         }
         # f"{base_url}/tick",
