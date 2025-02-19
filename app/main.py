@@ -162,7 +162,7 @@ current_payload = None
 
 
 # Background Task: Run monitor_task to send the status using the user's provided webhook URL.
-def monitor_task(payload: MonitorPayload):
+async def monitor_task(payload: MonitorPayload):
     global current_payload
     current_payload = payload  # Set the current payload so that send_to_telex() can use it.
     # Send the health check results to Telex using the user's webhook URL.
@@ -181,7 +181,7 @@ async def tick_endpoint(request: Request, background_tasks: BackgroundTasks):
             # For GET requests, use default (empty) settings so that the user must provide them
             monitor_payload = MonitorPayload(
                 channel_id="mysql-performance-monitor",
-                return_url=,  # No default webhook URL
+                return_url="",  # No default webhook URL
                 settings=[
                     Setting(label="MySQL Host", type="text", required=True, default=""),
                     Setting(label="MySQL User", type="text", required=True, default=""),
