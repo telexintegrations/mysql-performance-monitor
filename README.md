@@ -383,6 +383,16 @@ curl --location --request POST 'http://mysql-performance-monitor.onrender.com/ti
 
 This command sends a JSON payload with your MySQL connection details and the Telex webhook URL. The `/tick` endpoint will then trigger the health check, send the results to your Telex channel, and return a response indicating that the status was sent.
 
+<br>
+
+<h2 align="center">ScreenshotsOf My Integration</h2>
+
+![Screenshot 1](/Screenshot-1.png)
+
+![Screenshot 2](/Screenshot-2.png)
+
+<br>
+
 ## License
 
 [MIT License](LICENSE)
