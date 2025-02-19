@@ -224,7 +224,7 @@ def get_integration_json(request: Request):
                     "app_url": "https://mysql-performance-monitor.onrender.com",
                     "background_color": "#fff"
                 },
-                "is_active": true,
+                "is_active": "true",
                 "integration_type": "interval",
                 "key_features": [
                     "Monitors a remote MySQL server",
@@ -235,25 +235,25 @@ def get_integration_json(request: Request):
                     {
                         "label": "MySQL Host",
                         "type": "text",
-                        "required": true,
+                        "required": "true",
                         "default": ""
                     },
                     {
                         "label": "MySQL User",
                         "type": "text",
-                        "required": true,
+                        "required": "true",
                         "default": ""
                     },
                     {
                         "label": "MySQL Password",
                         "type": "text",
-                        "required": true,
+                        "required": "true",
                         "default": ""
                     },
                     {
                         "label": "MySQL Database",
                         "type": "text",
-                        "required": true,
+                        "required": "true",
                         "default": ""
                     }
                 ],
