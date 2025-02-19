@@ -143,13 +143,13 @@ def get_mysql_status_custom(host: str, user: str, password: str, database: str, 
         return {
             "version": version["version"] if version else "Unknown",
             "dbname": dbname["dbname"] if dbname else "Unknown",
+            "tables": table_names,
             "uptime": uptime["Value"] if uptime else "Unknown",
             "slow_queries": slow_queries["Value"] if slow_queries else "Unknown",
             "threads_connected": threads_connected["Value"] if threads_connected else "Unknown",
             "connections": connections["Value"] if connections else "Unknown",
             "open_conn": open_conn["open_conn"] if open_conn else "Unknown",
             "qcache_hits": qcache_hits["Value"] if qcache_hits else "Unknown",
-            "tables": table_names,
             "status": "success"
         }
     except pymysql.MySQLError as err:
