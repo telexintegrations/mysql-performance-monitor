@@ -225,6 +225,7 @@ def get_integration_json(request: Request):
                     "background_color": "#fff"
                 },
                 "is_active": "true",
+                "integration_category": "Monitoring & Logging",
                 "integration_type": "interval",
                 "key_features": [
                     "Monitors a remote MySQL server",
