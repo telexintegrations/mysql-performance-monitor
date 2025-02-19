@@ -234,6 +234,7 @@ def get_integration_json(request: Request):
     The endpoint to return the integration JSON.
     """
     # base_url = str(request.base_url).rstrip("/")
+    # https://imgur.com/ZIyrYyq
     try:
         return {
             "data": {
@@ -244,7 +245,7 @@ def get_integration_json(request: Request):
                 "descriptions": {
                     "app_name": "MySQL Performance Monitor",
                     "app_description": "Monitors MySQL Databases in real time",
-                    "app_logo": "https://imgur.com/ZIyrYyq",
+                    "app_logo": "https://imgur.com/a/okPr2SN",
                     "app_url": "https://mysql-performance-monitor.onrender.com",
                     "background_color": "#fff"
                 },
