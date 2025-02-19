@@ -335,7 +335,9 @@ curl --location --request POST 'http://127.0.0.1:5000/tick' \
 }'
 ```
 -->
+
 ```json
+
 curl --location --request POST 'http://mysql-performance-monitor.onrender.com/tick' --header 'Content-Type: application/json' --data '{
   "channel_id": "mysql-performance-monitor",
   "return_url": "Enter Your Desired Channel's WebHook URL here",
