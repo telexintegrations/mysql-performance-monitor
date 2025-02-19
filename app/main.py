@@ -246,7 +246,7 @@ def get_integration_json(request: Request):
                     "app_name": "MySQL Performance Monitor",
                     "app_description": "Monitors MySQL Databases in real time",
                     "app_logo": "https://imgur.com/a/okPr2SN",
-                    "app_url": "https://mysql-performance-monitor.onrender.com",
+                    "app_url": "https://mysql-performance-monitor.onrender.com/tick",
                     "background_color": "#fff"
                 },
                 "is_active": "true",
