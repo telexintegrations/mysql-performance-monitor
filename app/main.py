@@ -12,16 +12,12 @@ from pydantic import BaseModel
 from typing import List, Optional
 import httpx
 import pymysql
-from dotenv import load_dotenv
 import os
-from os import getenv, environ
-
-# Load environment variables
-load_dotenv()
+from os import environ
 
 app = FastAPI()
 
-# Configure CORS to allow specified origins
+# Configure CORS to allow specified origins (adjust as needed)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -37,20 +33,26 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Define Pydantic Models for integration payload
+
+# Pydantic Models for integration payload
 class Setting(BaseModel):
+    """ Pydantic model for integration settings """
     label: str
     type: str
     required: bool
     default: str
 
+
 class MonitorPayload(BaseModel):
+    """ Pydantic model for the payload sent to the /tick endpoint """
     channel_id: str
-    return_url: str
+    return_url: str  # This is the Telex webhook URL provided by the user.
     settings: List[Setting]
 
-# A custom function to check MySQL server health with given parameters.
+
+# Custom function to check MySQL server health using user-provided details.
 def get_mysql_status_custom(host: str, user: str, password: str, database: str, port: int = 3306):
+    """ Connects to a MySQL server and fetches its health status """
     try:
         connection = pymysql.connect(
             host=host,
@@ -115,69 +117,75 @@ def get_mysql_status_custom(host: str, user: str, password: str, database: str, 
             "status": "failure"
         }
 
-# Modified send_to_telex() now accepts a webhook_url parameter.
-def send_to_telex(webhook_url: str):
-    """
-    Sends the MySQL server health status to the Telex channel using the provided webhook URL.
-    """
-    mysql_status = get_mysql_status_custom(MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE)
-    payload = {
+
+# Background Task: Run the MySQL health check and send results to the user's provided Telex webhook.
+async def monitor_task(payload: MonitorPayload):
+    """ Background task to monitor MySQL server health and send results to Telex """
+    # Extract MySQL connection details from the payload's settings.
+    settings_dict = {s.label: s.default for s in payload.settings}
+    mysql_host = settings_dict.get("MySQL Host")
+    mysql_user = settings_dict.get("MySQL User")
+    mysql_password = settings_dict.get("MySQL Password")
+    mysql_database = settings_dict.get("MySQL Database")
+    
+    # Run the synchronous MySQL check in a background thread.
+    loop = asyncio.get_running_loop()
+    status = await loop.run_in_executor(None, get_mysql_status_custom, mysql_host, mysql_user, mysql_password, mysql_database)
+    
+    # Format the health check results as a message.
+    message = (
+        f"MySQL Server Health Status:\n"
+        f"Version: {status.get('version', 'N/A')}\n"
+        f"Database Name: {status.get('dbname', 'N/A')}\n"
+        f"Uptime: {status.get('uptime', 'N/A')} seconds\n"
+        f"Slow Queries: {status.get('slow_queries', 'N/A')}\n"
+        f"Threads Connected: {status.get('threads_connected', 'N/A')}\n"
+        f"Total Connections: {status.get('connections', 'N/A')}\n"
+        f"Current Open Connections: {status.get('open_conn', 'N/A')}\n"
+        f"Query Cache Hits: {status.get('qcache_hits', 'N/A')}\n"
+    )
+    
+    telex_payload = {
         "event_name": "MySQL Server Health Check",
-        "message": (
-            f"MySQL Server Health Status:\n"
-            f"Version: {mysql_status.get('version', 'N/A')}\n"
-            f"Database Name: {mysql_status.get('dbname', 'N/A')}\n"
-            f"Uptime: {mysql_status.get('uptime', 'N/A')} seconds\n"
-            f"Slow Queries: {mysql_status.get('slow_queries', 'N/A')}\n"
-            f"Threads Connected: {mysql_status.get('threads_connected', 'N/A')}\n"
-            f"Total Connections: {mysql_status.get('connections', 'N/A')}\n"
-            f"Current Open Connections: {mysql_status.get('open_conn', 'N/A')}\n"
-            f"Query Cache Hits: {mysql_status.get('qcache_hits', 'N/A')}\n"
-        ),
-        "status": mysql_status["status"],
+        "message": message,
+        "status": status["status"],
         "username": "MySQL Monitor"
     }
-    print("Sending the following message to Telex:\n", payload.get("message"))
-    response = requests.post(
-        webhook_url,
-        json=payload,
-        headers={
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        }
-    )
-    print("Telex Response:", response.json())
-    return response.json()
+    
+    headers = {"Content-Type": "application/json"}
+    async with httpx.AsyncClient() as client:
+        response = await client.post(payload.return_url, json=telex_payload, headers=headers)
+        print(f"Telex Response: {response.status_code}, {response.text}")
+    return status
 
-# Background Task: Run monitor_task to send the status using the user's webhook URL.
-async def monitor_task(payload: MonitorPayload):
-    # Use the user's webhook URL from the payload
-    webhook_url = payload.return_url
-    # Send to Telex using the provided webhook URL
-    send_to_telex(webhook_url)
 
-# /tick Endpoint: Triggers the MySQL health check in a background task,
-# returns the MySQL status in JSON, and includes the message "Check your Telex channel".
+# /tick Endpoint: Triggers the MySQL health check in a background task.
+# It also synchronously returns the MySQL status in JSON and a message to "Check your Telex channel".
 @app.api_route("/tick", methods=["GET", "POST"], status_code=202)
 async def tick_endpoint(request: Request, background_tasks: BackgroundTasks):
+    """ Endpoint to trigger the MySQL health check and send results to Telex """
     try:
         if request.method == "POST":
             payload_json = await request.json()
             monitor_payload = MonitorPayload.parse_obj(payload_json)
         else:
+            # Provide a default payload with empty MySQL details if none are provided.
             monitor_payload = MonitorPayload(
                 channel_id="mysql-performance-monitor",
-                return_url=os.getenv("TELEX_WEBHOOK_URL", "https://ping.telex.im/v1/webhooks/01951646-7c0f-7f5b-9aa4-ec674d2f666e"),
+                return_url="",  # In production, the user must supply this via integration settings.
                 settings=[
-                    Setting(label="MySQL Host", type="text", required=True, default=os.getenv("MYSQL_HOST", "localhost")),
-                    Setting(label="MySQL User", type="text", required=True, default=os.getenv("MYSQL_USER", "root")),
-                    Setting(label="MySQL Password", type="text", required=True, default=os.getenv("MYSQL_PASSWORD", "")),
-                    Setting(label="MySQL Database", type="text", required=True, default=os.getenv("MYSQL_DATABASE", "test_db")),
-                    Setting(label="WebHook URL Configuration", type="text", required=True, default=os.getenv("TELEX_WEBHOOK_URL", "https://ping.telex.im/v1/webhooks/01951646-7c0f-7f5b-9aa4-ec674d2f666e")),
+                    Setting(label="MySQL Host", type="text", required=True, default=""),
+                    Setting(label="MySQL User", type="text", required=True, default=""),
+                    Setting(label="MySQL Password", type="text", required=True, default=""),
+                    Setting(label="MySQL Database", type="text", required=True, default=""),
                     Setting(label="interval", type="text", required=True, default="*/5 * * * *")
                 ]
             )
-        # Schedule the background task to send the Telex message using the user's webhook URL.
+            # If no webhook URL was provided, raise an error.
+            if not monitor_payload.return_url:
+                raise HTTPException(status_code=400, detail="No Telex webhook URL provided in payload.")
+    
+        # Schedule the background task to send the Telex message using the user's provided webhook URL.
         background_tasks.add_task(monitor_task, monitor_payload)
     
         # Also, synchronously get the MySQL status for immediate JSON response.
@@ -185,10 +193,10 @@ async def tick_endpoint(request: Request, background_tasks: BackgroundTasks):
         mysql_status = await loop.run_in_executor(
             None,
             get_mysql_status_custom,
-            os.getenv("MYSQL_HOST", "localhost"),
-            os.getenv("MYSQL_USER", "root"),
-            os.getenv("MYSQL_PASSWORD", ""),
-            os.getenv("MYSQL_DATABASE", "test_db")
+            monitor_payload.settings[0].default,  # MySQL Host
+            monitor_payload.settings[1].default,  # MySQL User
+            monitor_payload.settings[2].default,  # MySQL Password
+            monitor_payload.settings[3].default   # MySQL Database
         )
     
         return JSONResponse(status_code=202, content={
@@ -198,9 +206,11 @@ async def tick_endpoint(request: Request, background_tasks: BackgroundTasks):
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
 
+
 # /integration.json Endpoint: Returns the integration configuration for Telex.
 @app.get("/integration.json")
 def get_integration_config(request: Request):
+    """ Endpoint to return the integration configuration for Telex """
     try:
         base_url = str(request.base_url).rstrip("/")
         return {
@@ -269,7 +279,9 @@ def get_integration_config(request: Request):
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": "Failed to generate integration JSON"})
 
+
 if __name__ == "__main__":
+    """ Run the FastAPI application """
     import uvicorn
     port = int(os.environ.get("PORT", 5000))
     uvicorn.run(app, host="0.0.0.0", port=port)
