@@ -285,7 +285,7 @@ def get_integration_json(request: Request):
                         "label": "interval",
                         "type": "text",
                         "required": "true",
-                        "default": "10 * * * *"
+                        "default": "/10 * * * *"
                     }
                 ],
                 "target_url": "https://mysql-performance-monitor.onrender.com/tick",
