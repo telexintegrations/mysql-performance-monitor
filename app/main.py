@@ -9,6 +9,7 @@ import requests
 import asyncio
 from fastapi import FastAPI, Request, BackgroundTasks
 # from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import JSONResponse
 from dotenv import load_dotenv
 import os
@@ -20,6 +21,23 @@ load_dotenv()
 
 app = FastAPI()
 # executor = ThreadPoolExecutor()
+
+
+# Configure CORS to allow specific origins (adjust the list as needed)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://staging.telextest.im",
+        "http://telextest.im",
+        "https://staging.telex.im",
+        "https://telex.im",
+        "https://mysql-performance-monitor.onrender.com",
+        "https://learnopolia.tech"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 # # Define Pydantic Models
@@ -197,8 +215,14 @@ def tick_endpoint(request: Request, background_tasks: BackgroundTasks):
     The endpoint to trigger the monitoring.
     """
     try:
+        # result = send_to_telex()
         send_to_telex()
-        return JSONResponse(status_code=202, content={"message": "Monitoring started, and messaged logged to Telex channel."})
+        return JSONResponse(status_code=202, content={
+            "message": "Monitoring started, and health status sent to Telex channel.",
+            "telex_response": "Check your telex channel"  # result
+        })
+        # send_to_telex()
+        # return JSONResponse(status_code=202, content={"message": "Monitoring started, and messaged logged to Telex channel."})
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
 
@@ -209,7 +233,7 @@ def get_integration_json(request: Request):
     """
     The endpoint to return the integration JSON.
     """
-    base_url = str(request.base_url).rstrip("/")
+    # base_url = str(request.base_url).rstrip("/")
     try:
         return {
             "data": {
@@ -256,6 +280,12 @@ def get_integration_json(request: Request):
                         "type": "text",
                         "required": "true",
                         "default": ""
+                    },
+                    {
+                        "label": "interval",
+                        "type": "text",
+                        "required": "true",
+                        "default": "10 * * * *"
                     }
                 ],
                 "target_url": "https://mysql-performance-monitor.onrender.com/tick",
