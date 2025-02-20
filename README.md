@@ -345,6 +345,10 @@ This command sends a JSON payload with your MySQL connection details and the Tel
 
 ![Screenshot 2](/Screenshot-2.png)
 
+![Screenshot 3](/Screenshot-3.png)
+
+![Screenshot 4](/Screenshot-4.png)
+
 <br>
 
 ## License
