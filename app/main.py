@@ -354,7 +354,7 @@ def get_integration_config(request: Request):
                         "label": "interval",
                         "type": "text",
                         "required": "true",
-                        "default": "* * * * *"
+                        "default": "*/20 * * * *"
                     }
                 ],
                 "target_url": f"{base_url}/tick",
